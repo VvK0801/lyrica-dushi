@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лирика Души — Эко-база на Алтае</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --cream: #F7F3EB; --dark: #1C2622; --gold: #C5A56A; --white: #ffffff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--cream); color: var(--dark); line-height: 1.6; overflow-x: hidden; }
+        .container { max-width: 1300px; margin: 0 auto; padding: 0 30px; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+        
+        .fade-in { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        .btn { display: inline-block; padding: 16px 40px; border-radius: 100px; font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.4s ease; text-decoration: none; border: none; text-align: center; }
+        .btn-gold { background: var(--gold); color: var(--dark); }
+        .btn-gold:hover { background: #B0904F; transform: translateY(-3px); }
+        .btn-dark { background: var(--dark); color: var(--white); }
+        .btn-dark:hover { background: #000; transform: translateY(-3px); }
+        
+        /* НОВЫЕ ЯРКИЕ КНОПКИ НА ГЛАВНОМ ЭКРАНЕ */
+        .btn-light {
+            background: #FFFFFF;
+            color: var(--dark);
+            border: 2px solid #FFFFFF;
+            font-weight: 800;
+        }
+        .btn-light:hover {
+            background: var(--gold);
+            color: var(--dark);
+            border-color: var(--gold);
+        }
+
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; z-index: 100; padding: 20px 0; background: rgba(15, 42, 34, 0.85); backdrop-filter: blur(10px); }
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; text-decoration: none; font-size: 24px; font-weight: 800; color: var(--white); letter-spacing: 2px; text-shadow: 0 2px 10px rgba(0,0,0,0.4); font-family: 'Playfair Display', serif; }
+        .logo img { height: 55px; width: auto; display: block; margin-right: 12px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
+        .logo span { color: var(--gold); }
+        .nav-links { display: flex; gap: 35px; }
+        .nav-links a { color: rgba(255,255,255,0.9); text-decoration: none; font-size: 15px; font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--gold); }
+        .nav-btn { background: var(--gold); color: var(--dark); padding: 12px 30px; border-radius: 30px; font-weight: 700; text-decoration: none; transition: 0.3s; }
+        .nav-btn:hover { background: var(--white); }
+
+        .hero { position: relative; height: 100vh; min-height: 800px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 100px 0 80px; }
+        .hero-bg { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.3) 100%), url('images/hero.jpg') center/cover no-repeat; z-index: -1; }
+        .hero-location { display: inline-block; background: rgba(0, 0, 0, 0.5); padding: 10px 20px; border-radius: 30px; letter-spacing: 5px; font-size: 13px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.8); font-weight: 700; }
+        .hero h1 { font-size: clamp(70px, 12vw, 160px); color: var(--white); margin-bottom: 10px; letter-spacing: -2px; line-height: 1; }
+        .hero h1 span { color: var(--gold); font-style: italic; font-weight: 400; }
+        .hero p { font-size: 22px; color: rgba(255,255,255,0.9); max-width: 700px; margin: 0 auto 40px; }
+        .hero-buttons { display: flex; gap: 20px; justify-content: center; }
+
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .about-text h2 { font-size: 52px; }
+        .about-text h2 span { color: var(--gold); }
+        .about-stats { display: flex; gap: 50px; margin-top: 50px; }
+        .stat-item h3 { font-size: 45px; color: var(--dark); margin-bottom: 5px; }
+        .stat-item h3 sup { font-size: 20px; color: var(--gold); }
+        .stat-item p { font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: #888; }
+        .about-img { height: 650px; border-radius: 250px 250px 20px 20px; background: url('images/about.jpg') center/cover no-repeat; box-shadow: -20px 20px 60px rgba(0,0,0,0.1); }
+
+        .section-title { font-size: 44px; text-align: center; margin-bottom: 15px; letter-spacing: -1px; }
+        .section-subtitle { text-align: center; color: var(--gold); font-size: 14px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 60px; font-weight: 600; }
+
+        .houses-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .house-card { position: relative; border-radius: 30px; overflow: hidden; height: 600px; transition: all 0.4s; text-decoration: none; color: inherit; }
+        .house-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.8s; }
+        .house-card:hover .house-bg { transform: scale(1.05); }
+        .house-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.1) 70%); display: flex; flex-direction: column; justify-content: flex-end; padding: 50px; }
+        .house-cat { color: var(--gold); text-transform: uppercase; font-size: 13px; letter-spacing: 3px; margin-bottom: 10px; }
+        .house-overlay h3 { color: var(--white); font-size: 38px; margin-bottom: 10px; }
+        .house-features { color: rgba(255,255,255,0.8); font-size: 16px; margin-bottom: 30px; }
+        .house-btn { align-self: flex-start; background: var(--gold); padding: 15px 35px; border-radius: 50px; color: var(--dark); font-weight: 700; text-decoration: none; transition: 0.3s; opacity: 0; transform: translateY(20px); }
+        .house-card:hover .house-btn { opacity: 1; transform: translateY(0); }
+        .price-tag { position: absolute; top: 30px; right: 30px; background: rgba(255,255,255,0.9); color: var(--dark); padding: 10px 20px; border-radius: 30px; font-weight: 700; font-size: 16px; }
+
+        .gallery-mosaic { display: grid; grid-template-columns: 1.2fr 1fr 1fr; grid-template-rows: 200px 200px; gap: 15px; }
+        .gallery-item-main { grid-row: span 2; height: 100%; }
+        .gallery-item { position: relative; height: 100%; border-radius: 20px; overflow: hidden; transition: 0.3s; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
+        .gallery-item:hover img { transform: scale(1.1); }
+        .gallery-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); opacity: 0; transition: opacity 0.5s; }
+        .gallery-item:hover::after { opacity: 1; }
+        .gallery-item p { position: absolute; bottom: 20px; left: 20px; color: var(--white); font-weight: 600; font-size: 20px; opacity: 0; transition: opacity 0.5s; z-index: 2; font-family: 'Playfair Display', serif; }
+        .gallery-item:hover p { opacity: 1; }
+        .gallery-mosaic .gallery-item:nth-child(2) { transform: translateY(10px); }
+        .gallery-mosaic .gallery-item:nth-child(5) { transform: translateY(-10px); }
+
+        .banya-section { background: var(--dark); color: var(--white); border-radius: 40px; padding: 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; margin: 60px 0; }
+        .banya-img { height: 450px; border-radius: 20px; background: url('images/banya.jpg') center/cover no-repeat; }
+        .banya-info h2 { font-size: 48px; margin-bottom: 20px; }
+        .banya-info p { color: rgba(255,255,255,0.7); }
+        .banya-info .btn { margin-top: 30px; }
+
+        .spa-links-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .spa-link-card { background: var(--white); border-radius: 30px; padding: 20px; text-decoration: none; color: var(--dark); transition: 0.3s; }
+        .spa-link-card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .spa-link-card img { width: 100%; height: 250px; object-fit: cover; border-radius: 20px; margin-bottom: 20px; }
+        .spa-link-card h3 { font-size: 28px; margin-bottom: 10px; }
+        .spa-link-card p { color: #666; margin-bottom: 20px; }
+
+        .activities-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
+        .activity-card { position: relative; height: 300px; border-radius: 20px; overflow: hidden; }
+        .activity-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .activity-card:hover img { transform: scale(1.1); }
+        .activity-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
+        .activity-info { position: absolute; bottom: 0; left: 0; padding: 20px; color: var(--white); z-index: 2; }
+        .activity-info h4 { font-size: 22px; }
+
+        .infra-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .infra-card { position: relative; border-radius: 20px; overflow: hidden; height: 400px; }
+        .infra-card img { width: 100%; height: 100%; object-fit: cover; }
+        .infra-card .info { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 30px; color: var(--white); }
+        .infra-card .info h3 { font-size: 24px; margin-bottom: 5px; }
+        .infra-card .info p { margin: 0; font-size: 14px; color: rgba(255,255,255,0.8); }
+
+        .booking-section { background: var(--dark); color: var(--white); border-radius: 50px; padding: 80px; position: relative; }
+        .booking-tabs { display: flex; gap: 15px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
+        .tab { padding: 12px 30px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.7); cursor: pointer; transition: 0.3s; font-weight: 500; font-size: 15px; }
+        .tab.active { background: var(--gold); border-color: var(--gold); color: var(--dark); font-weight: 700; }
+        .booking-form { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .input-group label { display: block; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 10px; }
+        .input-group input, .input-group select, .input-group textarea { width: 100%; background: rgba(255,255,255,0.05); border: none; border-bottom: 1px solid rgba(255,255,255,0.3); padding: 15px 0; color: var(--white); font-size: 18px; outline: none; transition: border 0.3s; font-family: inherit; }
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-bottom: 2px solid var(--gold); }
+        .booking-btn { grid-column: span 4; margin-top: 20px; justify-self: center; }
+
+        .faq-list { max-width: 800px; margin: 0 auto; }
+        .faq-item { border-bottom: 1px solid #ddd; padding: 25px 0; }
+        .faq-q { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 20px; font-weight: 600; transition: color 0.3s; }
+        .faq-q:hover { color: var(--gold); }
+        .faq-q span { font-size: 24px; }
+        .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; color: #666; padding-top: 0; }
+        .faq-item.active .faq-a { max-height: 200px; padding-top: 20px; }
+
+        .contact-flex { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: start; }
+        .contact-form { background: var(--white); padding: 50px; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+        .contact-form input, .contact-form textarea { width: 100%; background: #f0ebe3; border: none; padding: 18px; border-radius: 15px; margin-bottom: 20px; font-size: 16px; color: var(--dark); font-family: inherit; outline: none; transition: 0.3s; }
+        .contact-form input:focus, .contact-form textarea:focus { box-shadow: 0 0 0 2px var(--gold); }
+
+        .footer { background: var(--dark); color: var(--white); padding: 60px 0; text-align: center; margin-top: 100px; }
+        .footer-logo { font-size: 32px; color: var(--gold); font-weight: 800; margin-bottom: 30px; }
+        .footer-nav { display: flex; justify-content: center; gap: 40px; margin-bottom: 30px; }
+        .footer-nav a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 14px; transition: 0.3s; }
+        .footer-nav a:hover { color: var(--gold); }
+        .footer-copy { font-size: 13px; color: rgba(255,255,255,0.3); }
+
+        @media (max-width: 992px) {
+            .about-grid, .banya-section, .contact-flex { grid-template-columns: 1fr; display: grid; gap: 40px; }
+            .houses-grid, .activities-grid, .spa-links-grid { grid-template-columns: repeat(2, 1fr); }
+            .gallery-mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+            .gallery-item-main { grid-row: auto; height: 400px; }
+            .infra-grid { grid-template-columns: 1fr 1fr; }
+            .nav-links { display: none; }
+        }
+        @media (max-width: 600px) {
+            .section-title { font-size: 32px; }
+            .hero h1 { font-size: 50px; }
+            .houses-grid, .activities-grid, .spa-links-grid, .infra-grid { grid-template-columns: 1fr; }
+            .gallery-mosaic { grid-template-columns: 1fr; grid-template-rows: auto; }
+            .gallery-item-main { height: 400px; }
+            .gallery-item { height: 250px; }
+            .gallery-mosaic .gallery-item:nth-child(2),
+            .gallery-mosaic .gallery-item:nth-child(5) { transform: none; }
+            .booking-tabs { flex-direction: column; align-items: center; }
+            .btn { padding: 15px 35px; width: 100%; text-align: center; }
+            .hero-buttons { flex-direction: column; gap: 10px; width: 100%; max-width: 300px; margin: 0 auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-inner">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Лирика Души"> Лирика <span>Души</span>
+            </a>
+            <div class="nav-links">
+                <a href="#about">О комплексе</a>
+                <a href="#houses">Дома</a>
+                <a href="#gallery">Галерея</a>
+                <a href="#banya">Баня</a>
+                <a href="#spa">Ресторан, СПА, Бассейн</a>
+                <a href="#contacts">Контакты</a>
+            </div>
+            <a href="#booking" class="nav-btn">Забронировать</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-location">ГОРНЫЙ АЛТАЙ · ТЕЛЕЦКОЕ ОЗЕРО · АРТЫБАШ</div>
+            <h1>Лирика <span>Души</span></h1>
+            <p>Там, где природа говорит с душой</p>
+            <div class="hero-buttons">
+                <a href="#booking" class="btn btn-light">Забронировать дом</a>
+                <a href="#houses" class="btn btn-light">Посмотреть дома</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="section" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text fade-in">
+                    <div class="section-subtitle" style="text-align: left; margin-bottom: 20px;">Телецкое озеро · О комплексе</div>
+                    <h2>Место, где тайга <span>встречает озеро</span></h2>
+                    <p>«Лирика Души» — это эко-база отдыха на берегу Телецкого озера в районе Третьей речки, рядом с посёлком Артыбаш. Здесь нет суеты — только кедровая тайга, чистый воздух и тишина, в которой слышно, как говорит природа.</p>
+                    <p>Мы создавали каждый уголок с уважением к природе: экологичные материалы, локальная архитектура, нулевое вмешательство в ландшафт. Каждый гостевой дом — это отдельная история о единении с Алтаем.</p>
+                    <div class="about-stats">
+                        <div class="stat-item"><h3>2019</h3><p>Год основания</p></div>
+                        <div class="stat-item"><h3>4.9<sup>★</sup></h3><p>Средний рейтинг</p></div>
+                        <div class="stat-item"><h3>∞</h3><p>Вид на озеро</p></div>
+                    </div>
+                </div>
+                <div class="about-img fade-in"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="houses">
+        <div class="container">
+            <!-- Убрана лишняя фраза "Наши дома" -->
+            <h2 class="section-title">10 отдельных гостевых домов</h2>
+            
+            <div class="houses-grid">
+                <a href="house1.html" class="house-card fade-in">
+                    <div class="house-bg" style="background-image: url('images/house1.jpg');"></div>
+                    <div class="price-tag">от 8 500 ₽ / ночь</div>
+                    <div class="house-overlay">
+                        <div class="house-cat">4 дома</div>
+                        <h3>Лесная Студия</h3>
+                        <div class="house-features">40 м² · до 2 гостей</div>
+                        <span class="house-btn">Подробнее →</span>
+                    </div>
+                </a>
+
+                <a href="house2.html" class="house-card fade-in">
+                    <div class="house-bg" style="background-image: url('images/house2.jpg');"></div>
+                    <div class="price-tag">от 14 000 ₽ / ночь</div>
+                    <div class="house-overlay">
+                        <div class="house-cat">4 дома</div>
+                        <h3>Семейный Дом</h3>
+                        <div class="house-features">65 м² · до 4 гостей</div>
+                        <span class="house-btn">Подробнее →</span>
+                    </div>
+                </a>
+
+                <a href="house3.html" class="house-card fade-in">
+                    <div class="house-bg" style="background-image: url('images/house3.jpg');"></div>
+                    <div class="price-tag">от 20 000 ₽ / ночь</div>
+                    <div class="house-overlay">
+                        <div class="house-cat">2 дома</div>
+                        <h3>Панорамный Люкс</h3>
+                        <div class="house-features">85 м² · до 6 гостей</div>
+                        <span class="house-btn">Подробнее →</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== ГАЛЕРЕЯ ========== -->
+    <section class="section" id="gallery">
+        <div class="container">
+            <div class="section-subtitle">Галерея</div>
+            <h2 class="section-title">Атмосфера места</h2>
+            
+            <div class="gallery-mosaic">
+                <div class="gallery-item gallery-item-main fade-in">
+                    <img src="images/gallery_main.jpg" alt="Телецкое озеро">
+                    <p>Телецкое озеро</p>
+                </div>
+                <div class="gallery-item fade-in">
+                    <img src="images/gallery_1.jpg" alt="Интерьер дома">
+                    <p>Интерьер дома</p>
+                </div>
+                <div class="gallery-item fade-in">
+                    <img src="images/gallery_2.jpg" alt="Кедровая тайга">
+                    <p>Кедровая тайга</p>
+                </div>
+                <div class="gallery-item fade-in">
+                    <img src="images/gallery_3.jpg" alt="Горные вершины">
+                    <p>Горные вершины</p>
+                </div>
+                <div class="gallery-item fade-in">
+                    <img src="images/gallery_4.jpg" alt="Ресторан">
+                    <p>Ресторан</p>
+                </div>
+                <div class="gallery-item fade-in">
+                    <img src="images/gallery_5.jpg" alt="Уют в доме">
+                    <p>Уют в доме</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="banya">
+        <div class="container">
+            <div class="banya-section fade-in">
+                <div class="banya-img"></div>
+                <div class="banya-info">
+                    <div class="section-subtitle" style="text-align: left; color: var(--gold);">Банный комплекс</div>
+                    <h2>Кедровая баня</h2>
+                    <p>Две кедровые бани с купелью и видом на лес. Бронь от 2 000 ₽/час. Мы подготовим дрова, ароматные травы и полотенца. Всё, что вам нужно — это расслабиться!</p>
+                    <p style="color: rgba(255,255,255,0.6);">Принимаем компании до 10 человек. Работаем круглый год.</p>
+                    <a href="banya.html" class="btn btn-gold">Подробнее о бане</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="spa">
+        <div class="container">
+            <div class="section-subtitle">Единый комплекс</div>
+            <h2 class="section-title">Ресторан, СПА и Бассейн</h2>
+            <p style="text-align: center; margin-bottom: 40px;">Это три разных здания. Нажмите, чтобы перейти на отдельную страницу.</p>
+            
+            <div class="spa-links-grid">
+                <a href="restaurant.html" class="spa-link-card fade-in">
+                    <img src="images/restaurant_cover.jpg" alt="Ресторан">
+                    <h3>Ресторан</h3>
+                    <p>70 мест, алтайская кухня, панорамные окна.</p>
+                    <span class="btn btn-dark">Перейти →</span>
+                </a>
+                <a href="spa.html" class="spa-link-card fade-in">
+                    <img src="images/spa_cover.jpg" alt="СПА">
+                    <h3>СПА</h3>
+                    <p>Массаж, кедровая бочка, уходовые процедуры.</p>
+                    <span class="btn btn-dark">Перейти →</span>
+                </a>
+                <a href="pool.html" class="spa-link-card fade-in">
+                    <img src="images/pool_cover.jpg" alt="Бассейн">
+                    <h3>Бассейн</h3>
+                    <p>С видом на кедровый лес. Идеально для отдыха.</p>
+                    <span class="btn btn-dark">Перейти →</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="activities">
+        <div class="container">
+            <div class="section-subtitle">Активности</div>
+            <h2 class="section-title">Чем заняться</h2>
+            
+            <div class="activities-grid">
+                <div class="activity-card fade-in"><img src="images/act_1.jpg" alt="Тайга"><div class="activity-info"><h4>Прогулки по тайге</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_2.jpg" alt="Катер"><div class="activity-info"><h4>Катание на катере</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_3.jpg" alt="Водопады"><div class="activity-info"><h4>Водопады</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_4.jpg" alt="Рыбалка"><div class="activity-info"><h4>Рыбалка</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_5.jpg" alt="Квадроциклы"><div class="activity-info"><h4>Квадроциклы</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_6.jpg" alt="Велосипеды"><div class="activity-info"><h4>Велосипеды</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_7.jpg" alt="Лыжи"><div class="activity-info"><h4>Лыжи и снегоходы</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_8.jpg" alt="Фототуры"><div class="activity-info"><h4>Фототуры</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_9.jpg" alt="Дегустации"><div class="activity-info"><h4>Дегустации</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_10.jpg" alt="Костёр"><div class="activity-info"><h4>Романтика у костра</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_11.jpg" alt="Астронаблюдение"><div class="activity-info"><h4>Астронаблюдение</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_12.jpg" alt="Гора"><div class="activity-info"><h4>Гора Тилан-Туу</h4></div></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-subtitle">Инфраструктура</div>
+            <h2 class="section-title">Всё для отдыха</h2>
+            <div class="infra-grid">
+                <div class="infra-card fade-in">
+                    <img src="images/infra_1.jpg" alt="Астрокупол и Набережная">
+                    <div class="info"><h3>Астрокупол и Набережная</h3><p>Наблюдение за звёздами и прогулки у воды.</p></div>
+                </div>
+                <div class="infra-card fade-in">
+                    <img src="images/infra_2.jpg" alt="Детская площадка">
+                    <div class="info"><h3>Детская площадка</h3><p>Безопасные игры из натурального дерева.</p></div>
+                </div>
+                <div class="infra-card fade-in">
+                    <img src="images/infra_3.jpg" alt="Тропа здоровья">
+                    <div class="info"><h3>Тропа здоровья</h3><p>Маршрут для прогулок и восстановления сил.</p></div>
+                </div>
+                <div class="infra-card fade-in">
+                    <img src="images/infra_4.jpg" alt="Костровая площадь">
+                    <div class="info"><h3>Костровая площадь</h3><p>Уютные посиделки с гитарой, песнями и историями.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-subtitle">Отзывы</div>
+            <h2 class="section-title">Что говорят гости</h2>
+            <div class="features-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;">
+                <div class="review-card fade-in">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">“Невероятное место. Просыпаешься с видом на Телецкое — и всё остальное перестаёт иметь значение. Сервис на уровне европейских эко-резортов.”</p>
+                    <h4>Анна К.</h4>
+                    <p style="color: #888; font-size: 14px;">Новосибирск · Июль 2025</p>
+                </div>
+                <div class="review-card fade-in">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">“Приезжали с семьёй в Семейный Дом. Дети не хотели уезжать. Баня, купель, лес — идеальное отключение от города. Вернёмся зимой.”</p>
+                    <h4>Михаил Р.</h4>
+                    <p style="color: #888; font-size: 14px;">Москва · Август 2025</p>
+                </div>
+                <div class="review-card fade-in">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">“Панорамный Люкс — это отдельная вселенная. Собственная купель, три спальни, и огромные окна с озером. Ресторан тоже на высоте.”</p>
+                    <h4>Ольга В.</h4>
+                    <p style="color: #888; font-size: 14px;">Томск · Сентябрь 2025</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="booking">
+        <div class="container">
+            <div class="booking-section fade-in">
+                <div class="section-subtitle" style="color: var(--gold);">Онлайн-бронирование</div>
+                <h2 class="section-title" style="color: var(--white);">Забронируйте прямо сейчас</h2>
+                <div class="booking-tabs">
+                    <div class="tab active" data-target="house">Дом</div>
+                    <div class="tab" data-target="restaurant">Столик в ресторане</div>
+                    <div class="tab" data-target="masterclass">Мастер-класс</div>
+                    <div class="tab" data-target="spa">СПА / Бассейн</div>
+                </div>
+                <form class="booking-form" onsubmit="event.preventDefault(); alert('Заявка отправлена!');">
+                    <div class="input-group">
+                        <label>Что бронируем?</label>
+                        <select id="serviceSelect">
+                            <option>Лесная Студия</option>
+                            <option>Семейный Дом</option>
+                            <option>Панорамный Люкс</option>
+                            <option>Столик в ресторане</option>
+                            <option>СПА / Бассейн</option>
+                            <option>Гончарное искусство</option>
+                            <option>Резьба по дереву</option>
+                            <option>Чайная церемония</option>
+                        </select>
+                    </div>
+                    <div class="input-group"><label>Дата заезда</label><input type="date"></div>
+                    <div class="input-group"><label>Дата выезда</label><input type="date"></div>
+                    <div class="input-group"><label>Гости</label><select><option>1 гость</option><option>2 гостя</option><option>3 гостя</option><option>4 гостя</option><option>5+</option></select></div>
+                    <div class="input-group" style="grid-column: span 4;"><label>Комментарий</label><textarea rows="3" style="resize: none;" placeholder="Ваши пожелания..."></textarea></div>
+                    <div class="booking-btn"><button type="submit" class="btn btn-gold">Забронировать</button></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-subtitle">FAQ</div>
+            <h2 class="section-title">Часто задаваемые вопросы</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-q" onclick="this.parentElement.classList.toggle('active')">Как добраться до базы отдыха? <span>+</span></div>
+                    <div class="faq-a">Мы находимся в поселке Артыбаш. Удобнее всего доехать на автомобиле (есть бесплатная парковка) или заказать трансфер.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="this.parentElement.classList.toggle('active')">Работает ли база зимой? <span>+</span></div>
+                    <div class="faq-a">Да, мы работаем круглый год. Зимой доступны бани, купели, снегоходы и лыжи.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="this.parentElement.classList.toggle('active')">Можно ли приехать с домашними животными? <span>+</span></div>
+                    <div class="faq-a">Да, в некоторые категории домов можно заселяться с питомцами. Уточняйте при бронировании.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="this.parentElement.classList.toggle('active')">Что включено в стоимость? <span>+</span></div>
+                    <div class="faq-a">В стоимость включено проживание, Wi-Fi, парковка, пользование всей инфраструктурой базы.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="this.parentElement.classList.toggle('active')">Есть ли минимальный срок бронирования? <span>+</span></div>
+                    <div class="faq-a">В будние дни минимальный срок 1 ночь, в праздничные дни — от 2 ночей.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="this.parentElement.classList.toggle('active')">Как работает отмена? <span>+</span></div>
+                    <div class="faq-a">Бесплатная отмена за 7 дней до заезда. При более поздней отмене удерживается стоимость одной ночи.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="contacts">
+        <div class="container">
+            <div class="section-subtitle">Контакты</div>
+            <h2 class="section-title">Приедьте к нам</h2>
+            <div class="contact-flex">
+                <div class="contact-info fade-in">
+                    <h3>Свяжитесь с нами</h3>
+                    <div class="contact-item"><span>Адрес</span><p>Республика Алтай, Турочакский район, пос. Артыбаш, район Третьей речки</p></div>
+                    <div class="contact-item"><span>Телефон</span><a href="tel:+73887012345">+7 (38870) 1-23-45</a></div>
+                    <div class="contact-item"><span>Email</span><a href="mailto:hello@lyrika-dushi.ru">hello@lyrika-dushi.ru</a></div>
+                    <div class="contact-item"><span>Мессенджеры</span><p>WhatsApp · Telegram · VK</p></div>
+                    <div class="contact-item"><span>Координаты</span><p>51.7878° N, 87.2704° E</p></div>
+                </div>
+                <form class="contact-form fade-in" onsubmit="event.preventDefault(); alert('Отправлено!');">
+                    <h3 style="margin-bottom: 30px;">Написать нам</h3>
+                    <input type="text" placeholder="Ваше имя" required>
+                    <input type="tel" placeholder="Ваш телефон" required>
+                    <textarea rows="5" placeholder="Ваше сообщение..."></textarea>
+                    <button type="submit" class="btn btn-dark" style="width: 100%;">Отправить</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-logo">✦ Лирика Души</div>
+            <div class="footer-nav">
+                <a href="#about">О комплексе</a>
+                <a href="#houses">Дома</a>
+                <a href="#gallery">Галерея</a>
+                <a href="#banya">Баня</a>
+                <a href="#spa">Ресторан, СПА, Бассейн</a>
+                <a href="#contacts">Контакты</a>
+            </div>
+            <p class="footer-copy">Эко-база © 2026 · Республика Алтай, пос. Артыбаш</p>
+        </div>
+    </footer>
+
+    <script>
+        const bookingTabs = document.querySelectorAll('.tab');
+        bookingTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                bookingTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const target = tab.getAttribute('data-target');
+                const select = document.getElementById('serviceSelect');
+                if (target === 'house') select.value = 'Лесная Студия';
+                else if (target === 'restaurant') select.value = 'Столик в ресторане';
+                else if (target === 'masterclass') select.value = 'Гончарное искусство';
+                else if (target === 'spa') select.value = 'СПА / Бассейн';
+            });
+        });
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+    </script>
+</body>
+</html>

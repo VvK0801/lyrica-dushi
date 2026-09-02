@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лирика Души — Эко-база на Алтае</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --cream: #F7F3EB; --dark: #1C2622; --gold: #C5A56A; --white: #ffffff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--cream); color: var(--dark); line-height: 1.6; overflow-x: hidden; }
+        .container { max-width: 1300px; margin: 0 auto; padding: 0 30px; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+        
+        .fade-in { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        .btn { display: inline-block; padding: 16px 40px; border-radius: 100px; font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.4s ease; text-decoration: none; border: none; text-align: center; }
+        .btn-gold { background: var(--gold); color: var(--dark); }
+        .btn-gold:hover { background: #B0904F; transform: translateY(-3px); }
+        .btn-dark { background: var(--dark); color: var(--white); }
+        .btn-dark:hover { background: #000; transform: translateY(-3px); }
+        
+        .btn-light {
+            background: #FFFFFF;
+            color: var(--dark);
+            border: 2px solid #FFFFFF;
+            font-weight: 800;
+        }
+        .btn-light:hover {
+            background: var(--gold);
+            color: var(--dark);
+            border-color: var(--gold);
+        }
+
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; z-index: 100; padding: 15px 20px; background: rgba(15, 42, 34, 0.9); backdrop-filter: blur(10px); }
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; gap: 30px; }
+        .logo { display: flex; align-items: center; text-decoration: none; font-size: 24px; font-weight: 800; color: var(--white); letter-spacing: 2px; text-shadow: 0 2px 10px rgba(0,0,0,0.4); font-family: 'Playfair Display', serif; }
+        .logo img { height: 50px; width: auto; display: block; margin-right: 12px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
+        .logo span { color: var(--gold); }
+        .nav-links { display: flex; gap: 25px; }
+        .nav-links a { color: rgba(255,255,255,0.9); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--gold); }
+        .nav-btn { background: var(--gold); color: var(--dark); padding: 12px 30px; border-radius: 30px; font-weight: 700; text-decoration: none; transition: 0.3s; }
+        .nav-btn:hover { background: var(--white); }
+
+        .hero { position: relative; height: 100vh; min-height: 800px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 100px 0 80px; }
+        .hero-bg { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.3) 100%), url('images/hero.jpg') center/cover no-repeat; z-index: -1; }
+        .hero-location { display: inline-block; background: rgba(0, 0, 0, 0.5); padding: 10px 20px; border-radius: 30px; letter-spacing: 5px; font-size: 13px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.8); font-weight: 700; }
+        .hero h1 { font-size: clamp(70px, 12vw, 160px); color: var(--white); margin-bottom: 10px; letter-spacing: -2px; line-height: 1; }
+        .hero h1 span { color: var(--gold); font-style: italic; font-weight: 400; }
+        .hero p { font-size: 22px; color: rgba(255,255,255,0.9); max-width: 700px; margin: 0 auto 40px; }
+        .hero-buttons { display: flex; gap: 20px; justify-content: center; }
+
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .about-text h2 { font-size: 52px; }
+        .about-text h2 span { color: var(--gold); }
+        .about-stats { display: flex; gap: 50px; margin-top: 50px; }
+        .stat-item h3 { font-size: 45px; color: var(--dark); margin-bottom: 5px; }
+        .stat-item h3 sup { font-size: 20px; color: var(--gold); }
+        .stat-item p { font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: #888; }
+        .about-img { height: 650px; border-radius: 250px 250px 20px 20px; background: url('images/about.jpg') center/cover no-repeat; box-shadow: -20px 20px 60px rgba(0,0,0,0.1); }
+
+        .section-title { font-size: 44px; text-align: center; margin-bottom: 15px; letter-spacing: -1px; }
+        .section-subtitle { text-align: center; color: var(--gold); font-size: 14px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 60px; font-weight: 600; }
+
+        .section { padding: 30px 0; }
+        .tight-bottom { padding-bottom: 50px !important; }
+        .tight-top { padding-top: 50px !important; }
+
+        .houses-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .house-card { position: relative; border-radius: 30px; overflow: hidden; height: 600px; transition: transform 0.3s ease, box-shadow 0.3s ease; text-decoration: none; color: inherit; }
+        .house-card:hover { transform: translateY(-15px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
+        .house-bg { position: absolute; inset: 0; background-size: cover; background-position: center; }
+        .house-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.1) 70%); display: flex; flex-direction: column; justify-content: flex-end; padding: 50px; }
+        .house-cat { color: var(--gold); text-transform: uppercase; font-size: 13px; letter-spacing: 3px; margin-bottom: 10px; }
+        .house-overlay h3 { color: var(--white); font-size: 38px; margin-bottom: 10px; }
+        .house-features { color: rgba(255,255,255,0.8); font-size: 16px; margin-bottom: 30px; }
+        .house-btn { align-self: flex-start; background: var(--gold); padding: 15px 35px; border-radius: 50px; color: var(--dark); font-weight: 700; text-decoration: none; transition: 0.3s; opacity: 0; transform: translateY(20px); }
+        .house-card:hover .house-btn { opacity: 1; transform: translateY(0); }
+        .price-tag { position: absolute; top: 30px; right: 30px; background: rgba(255,255,255,0.9); color: var(--dark); padding: 10px 20px; border-radius: 30px; font-weight: 700; font-size: 16px; }
+
+        .banya-section { background: var(--dark); color: var(--white); border-radius: 40px; padding: 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; margin: 40px 0; }
+        .banya-carousel { position: relative; overflow: hidden; border-radius: 20px; height: 450px; }
+        .banya-carousel-track { display: flex; transition: transform 0.5s ease; }
+        .banya-carousel-slide { min-width: 100%; }
+        .banya-carousel-slide img { width: 100%; height: 450px; object-fit: cover; }
+        .banya-carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: #fff; border: none; padding: 15px; cursor: pointer; z-index: 2; font-size: 20px; }
+        .banya-carousel-btn.prev { left: 0; }
+        .banya-carousel-btn.next { right: 0; }
+        .banya-carousel-btn:hover { background: var(--gold); color: var(--dark); }
+        .banya-info h2 { font-size: 48px; margin-bottom: 20px; }
+        .banya-info p { color: rgba(255,255,255,0.7); }
+        .banya-info .btn { margin-top: 30px; }
+
+        .reception-section {
+            background: var(--white);
+            border-radius: 40px;
+            padding: 80px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+            margin: 40px 0;
+        }
+        .reception-text h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .reception-text p {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .reception-carousel {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            height: 450px;
+        }
+        .reception-carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        .reception-carousel-slide {
+            min-width: 100%;
+        }
+        .reception-carousel-slide img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+        }
+        .reception-carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            z-index: 2;
+            font-size: 20px;
+        }
+        .reception-carousel-btn.prev { left: 0; }
+        .reception-carousel-btn.next { right: 0; }
+        .reception-carousel-btn:hover {
+            background: var(--gold);
+            color: var(--dark);
+        }
+
+        .tea-section { background: var(--dark); color: var(--white); border-radius: 40px; padding: 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; margin: 40px 0; }
+        .tea-img { height: 500px; border-radius: 20px; background: url('images/tea.jpg') center/cover no-repeat; }
+        .tea-info h2 { font-size: 48px; margin-bottom: 20px; }
+        .tea-info p { color: rgba(255,255,255,0.7); }
+        .tea-info .btn { margin-top: 30px; }
+
+        .craft-section { background: var(--white); border-radius: 40px; padding: 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; margin: 40px 0; }
+        .craft-img { height: 500px; border-radius: 20px; background: url('images/craft.jpg') center/cover no-repeat; }
+        .craft-info h2 { font-size: 48px; margin-bottom: 20px; }
+        .craft-info p { color: #666; }
+        .craft-info .btn { margin-top: 30px; }
+
+        .spa-links-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .spa-link-card { background: var(--white); border-radius: 30px; padding: 20px; text-decoration: none; color: var(--dark); transition: 0.3s; }
+        .spa-link-card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .spa-link-card img { width: 100%; height: 250px; object-fit: cover; border-radius: 20px; margin-bottom: 20px; }
+        .spa-link-card h3 { font-size: 28px; margin-bottom: 10px; }
+        .spa-link-card p { color: #666; margin-bottom: 20px; }
+
+        .complex-card { background: var(--white); border-radius: 30px; padding: 50px; text-decoration: none; color: var(--dark); display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+        .complex-img { height: 450px; background: url('images/spa_complex_cover.jpg') center/cover no-repeat; border-radius: 20px; }
+        .complex-info h2 { font-size: 42px; margin-bottom: 15px; }
+        .complex-info p { color: #666; margin-bottom: 20px; }
+        .complex-info .btn { margin-top: 20px; }
+
+        .activities-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
+        .activity-card { position: relative; height: 300px; border-radius: 20px; overflow: hidden; }
+        .activity-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .activity-card:hover img { transform: scale(1.1); }
+        .activity-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
+        .activity-info { position: absolute; bottom: 0; left: 0; padding: 20px; color: var(--white); z-index: 2; }
+        .activity-info h4 { font-size: 22px; }
+
+        .infra-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .infra-card { position: relative; border-radius: 20px; overflow: hidden; height: 400px; }
+        .infra-card img { width: 100%; height: 100%; object-fit: cover; }
+        .infra-card .info { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 30px; color: var(--white); }
+        .infra-card .info h3 { font-size: 24px; margin-bottom: 5px; }
+        .infra-card .info p { margin: 0; font-size: 14px; color: rgba(255,255,255,0.8); }
+
+        .booking-section { background: var(--dark); color: var(--white); border-radius: 50px; padding: 80px; position: relative; }
+        .booking-tabs { display: flex; gap: 15px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
+        .tab { padding: 12px 30px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.7); cursor: pointer; transition: 0.3s; font-weight: 500; font-size: 15px; }
+        .tab.active { background: var(--gold); border-color: var(--gold); color: var(--dark); font-weight: 700; }
+        .booking-form { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .input-group label { display: block; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 10px; }
+        .input-group input, .input-group select, .input-group textarea { width: 100%; background: rgba(255,255,255,0.05); border: none; border-bottom: 1px solid rgba(255,255,255,0.3); padding: 15px 0; color: var(--white); font-size: 18px; outline: none; transition: border 0.3s; font-family: inherit; }
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-bottom: 2px solid var(--gold); }
+        .booking-btn { grid-column: span 4; margin-top: 20px; justify-self: center; }
+
+        .faq-list { max-width: 800px; margin: 0 auto; }
+        .faq-item { border-bottom: 1px solid #ddd; padding: 25px 0; }
+        .faq-q { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 20px; font-weight: 600; transition: color 0.3s; }
+        .faq-q:hover { color: var(--gold); }
+        .faq-q span { font-size: 24px; }
+        .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; color: #666; padding-top: 0; }
+        .faq-item.active .faq-a { max-height: 200px; padding-top: 20px; }
+
+        .contact-flex { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: start; }
+        .contact-form { background: var(--white); padding: 50px; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+        .contact-form input, .contact-form textarea { width: 100%; background: #f0ebe3; border: none; padding: 18px; border-radius: 15px; margin-bottom: 20px; font-size: 16px; color: var(--dark); font-family: inherit; outline: none; transition: 0.3s; }
+        .contact-form input:focus, .contact-form textarea:focus { box-shadow: 0 0 0 2px var(--gold); }
+
+        .footer { background: var(--dark); color: var(--white); padding: 60px 0; text-align: center; margin-top: 100px; }
+        .footer-logo { font-size: 32px; color: var(--gold); font-weight: 800; margin-bottom: 30px; }
+        .footer-nav { display: flex; justify-content: center; gap: 40px; margin-bottom: 30px; }
+        .footer-nav a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 14px; transition: 0.3s; }
+        .footer-nav a:hover { color: var(--gold); }
+        .footer-copy { font-size: 13px; color: rgba(255,255,255,0.3); }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+            background: var(--gold);
+            color: var(--dark);
+            border: none;
+            border-radius: 50%;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+        .back-to-top:hover {
+            background: var(--white);
+            transform: translateY(-5px);
+        }
+
+        .health-path-carousel {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            height: 600px;
+        }
+        .health-path-carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        .health-path-carousel-slide {
+            min-width: 100%;
+        }
+        .health-path-carousel-slide img {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+        }
+        .health-path-carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            z-index: 2;
+            font-size: 20px;
+        }
+        .health-path-carousel-btn.prev { left: 0; }
+        .health-path-carousel-btn.next { right: 0; }
+        .health-path-carousel-btn:hover {
+            background: var(--gold);
+            color: var(--dark);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal {
+            background: var(--white);
+            border-radius: 30px;
+            padding: 40px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .modal h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        .modal .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: var(--dark);
+            background: none;
+            border: none;
+            transition: 0.3s;
+        }
+        .modal .close-btn:hover {
+            color: var(--gold);
+        }
+        .modal input, .modal select, .modal textarea {
+            width: 100%;
+            background: #f0ebe3;
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: var(--dark);
+            font-family: inherit;
+            outline: none;
+        }
+        .modal input:focus, .modal select:focus, .modal textarea:focus {
+            box-shadow: 0 0 0 2px var(--gold);
+        }
+        .modal .btn {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 992px) {
+            .about-grid, .banya-section, .reception-section, .tea-section, .craft-section, .contact-flex { grid-template-columns: 1fr; display: grid; gap: 40px; }
+            .houses-grid, .activities-grid { grid-template-columns: repeat(2, 1fr); }
+            .infra-grid { grid-template-columns: 1fr 1fr; }
+            .nav-links { display: none; }
+        }
+        @media (max-width: 600px) {
+            .section-title { font-size: 32px; }
+            .hero h1 { font-size: 50px; }
+            .houses-grid, .activities-grid, .infra-grid { grid-template-columns: 1fr; }
+            .booking-tabs { flex-direction: column; align-items: center; }
+            .btn { padding: 15px 35px; width: 100%; text-align: center; }
+            .hero-buttons { flex-direction: column; gap: 10px; width: 100%; max-width: 300px; margin: 0 auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-inner">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Лирика Души"> Лирика <span>Души</span>
+            </a>
+            <div class="nav-links">
+                <a href="#about">О комплексе</a>
+                <a href="#houses">Дома</a>
+                <a href="#banya">Баня</a>
+                <a href="#tea">Чайная</a>
+                <a href="#craft">Мастерская</a>
+                <a href="#spa">Зона отдыха</a>
+                <a href="#contacts">Контакты</a>
+            </div>
+            <a href="#booking" class="nav-btn">Забронировать</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-location">ГОРНЫЙ АЛТАЙ · ТЕЛЕЦКОЕ ОЗЕРО · АРТЫБАШ</div>
+            <h1>Лирика <span>Души</span></h1>
+            <p>Там, где природа говорит с душой</p>
+            <div class="hero-buttons">
+                <a href="#booking" class="btn btn-light">Забронировать дом</a>
+                <a href="#houses" class="btn btn-light">Посмотреть дома</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="section" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text fade-in">
+                    <div class="section-subtitle" style="text-align: left; margin-bottom: 20px;">Телецкое озеро · О комплексе</div>
+                    <h2>Место, где тайга <span>встречает озеро</span></h2>
+                    <p>«Лирика Души» — это эко-база отдыха на берегу Телецкого озера в районе Третьей речки, рядом с посёлком Артыбаш. Здесь нет суеты — только кедровая тайга, чистый воздух и тишина, в которой слышно, как говорит природа.</p>
+                    <p>Мы создали каждый уголок с уважением к природе: экологичные материалы, локальная архитектура, нулевое вмешательство в ландшафт. Каждый гостевой дом — это отдельная история о единении с Алтаем.</p>
+                    <div class="about-stats">
+                        <div class="stat-item"><h3>2019</h3><p>Год основания</p></div>
+                        <div class="stat-item"><h3>4.9<sup>★</sup></h3><p>Средний рейтинг</p></div>
+                        <div class="stat-item"><h3>∞</h3><p>Вид на озеро</p></div>
+                    </div>
+                </div>
+                <div class="about-img fade-in"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="houses">
+        <div class="container">
+            <h2 class="section-title">10 отдельных гостевых домов</h2>
+            
+            <div class="houses-grid">
+                <a href="house1.html" class="house-card fade-in">
+                    <div class="house-bg" style="background-image: url('images/house1.jpg');"></div>
+                    <div class="price-tag">от 8 500 ₽ / ночь</div>
+                    <div class="house-overlay">
+                        <div class="house-cat">4 дома</div>
+                        <h3>Лесная Студия</h3>
+                        <div class="house-features">40 м² · до 2 гостей</div>
+                        <span class="house-btn">Подробнее →</span>
+                    </div>
+                </a>
+
+                <a href="house2.html" class="house-card fade-in">
+                    <div class="house-bg" style="background-image: url('images/house2.jpg');"></div>
+                    <div class="price-tag">от 14 000 ₽ / ночь</div>
+                    <div class="house-overlay">
+                        <div class="house-cat">4 дома</div>
+                        <h3>Семейный Дом</h3>
+                        <div class="house-features">65 м² · до 4 гостей</div>
+                        <span class="house-btn">Подробнее →</span>
+                    </div>
+                </a>
+
+                <a href="house3.html" class="house-card fade-in">
+                    <div class="house-bg" style="background-image: url('images/house3.jpg');"></div>
+                    <div class="price-tag">от 20 000 ₽ / ночь</div>
+                    <div class="house-overlay">
+                        <div class="house-cat">2 дома</div>
+                        <h3>Панорамный Люкс</h3>
+                        <div class="house-features">85 м² · до 6 гостей</div>
+                        <span class="house-btn">Подробнее →</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="reception-section fade-in">
+                <div class="reception-text">
+                    <div class="section-subtitle" style="text-align: left; color: var(--gold);">Ресепшен</div>
+                    <h2>Здесь начинается ваш отдых</h2>
+                    <p>Наш ресепшен — первое место, которое вы видите, приезжая на базу. Мы всегда рады встретить вас, помочь с заселением, рассказать о территории и ответить на все вопросы.</p>
+                    <p>В здании ресепшена находится стойка регистрации, зона отдыха с камином и кофейная точка. Именно отсюда начинается ваше знакомство с «Лирикой Души».</p>
+                </div>
+                <div class="reception-carousel" id="carousel-reception">
+                    <div class="reception-carousel-track">
+                        <div class="reception-carousel-slide"><img src="images/reception_1.jpg" alt="Ресепшен"></div>
+                        <div class="reception-carousel-slide"><img src="images/reception_2.jpg" alt="Ресепшен внутри"></div>
+                    </div>
+                    <button class="reception-carousel-btn prev" onclick="moveReceptionCarousel(-1)">‹</button>
+                    <button class="reception-carousel-btn next" onclick="moveReceptionCarousel(1)">›</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="banya">
+        <div class="container">
+            <div class="banya-section fade-in">
+                <div class="banya-carousel" id="carousel-banya">
+                    <div class="banya-carousel-track">
+                        <div class="banya-carousel-slide"><img src="images/banya_1.jpg" alt="Баня с купелью"></div>
+                        <div class="banya-carousel-slide"><img src="images/banya_2.jpg" alt="Парная"></div>
+                        <div class="banya-carousel-slide"><img src="images/banya_3.jpg" alt="Внутренний вид"></div>
+                    </div>
+                    <button class="banya-carousel-btn prev" onclick="moveBanyaCarousel(-1)">‹</button>
+                    <button class="banya-carousel-btn next" onclick="moveBanyaCarousel(1)">›</button>
+                </div>
+                <div class="banya-info">
+                    <div class="section-subtitle" style="text-align: left; color: var(--gold);">Банный комплекс</div>
+                    <h2>Кедровая баня</h2>
+                    <p>Две кедровые бани с купелью и видом на лес. Бронь от 2 000 ₽/час за одну баню. Мы подготовим дрова, ароматные травы и полотенца. Всё, что вам нужно — это расслабиться!</p>
+                    <p style="color: rgba(255,255,255,0.6);">Принимаем компании до 10 человек. Работаем круглый год.</p>
+                    <button class="btn btn-gold" onclick="openModal('banyaModal')">Заказать баню</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="tea">
+        <div class="container">
+            <div class="tea-section fade-in">
+                <div class="tea-img"></div>
+                <div class="tea-info">
+                    <div class="section-subtitle" style="text-align: left; color: var(--gold);">Чайная церемония</div>
+                    <h2>Алтайская чайная мастерская</h2>
+                    <p>Традиционные алтайские чаепития с травяными сборами и оберегами. Узнайте о целебных свойствах местных трав и насладитесь уникальным вкусом.</p>
+                    <p style="color: rgba(255,255,255,0.6);">Сеансы проводятся ежедневно. Стоимость: 900 ₽ / час.</p>
+                    <button class="btn btn-gold" onclick="openModal('teaModal')">Записаться на чаепитие</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="craft">
+        <div class="container">
+            <div class="craft-section fade-in">
+                <div class="craft-img"></div>
+                <div class="craft-info">
+                    <div class="section-subtitle" style="text-align: left; color: var(--gold);">Мастер-классы</div>
+                    <h2>Ремесленная мастерская</h2>
+                    <p>Мастер-классы по резьбе, гончарному делу, плетению из бересты. Все материалы натуральные, а занятия проходят в уютной атмосфере.</p>
+                    <button class="btn btn-dark" onclick="openModal('craftModal')">Записаться на мастер-класс</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="spa">
+        <div class="container">
+            <h2 class="section-title">Зона отдыха</h2>
+            <p style="text-align: center; margin-bottom: 40px;">Три здания в одном комплексе: ресторан «Лирика» с панорамными окнами, СПА с массажем и кедровой бочкой, а также подогреваемый бассейн с видом на лес. Нажмите на картинку, чтобы узнать подробнее.</p>
+            
+            <a href="spa-complex.html" class="complex-card fade-in">
+                <div class="complex-img"></div>
+                <div class="complex-info">
+                    <h3>Ресторан, бассейн и СПА на одной территории</h3>
+                    <p>В современном комплексе вас ждут ресторан «Лирика» с панорамными окнами, зона СПА с массажем и кедровой бочкой, а также подогреваемый бассейн с видом на лес.</p>
+                    <span class="btn btn-dark">Перейти в зону отдыха →</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section class="section" id="activities">
+        <div class="container">
+            <h2 class="section-title">Чем заняться</h2>
+            
+            <div class="activities-grid">
+                <div class="activity-card fade-in"><img src="images/act_1.jpg" alt="Тайга"><div class="activity-info"><h4>Прогулки по тайге</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_2.jpg" alt="Катер"><div class="activity-info"><h4>Катание на катере</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_3.jpg" alt="Водопады"><div class="activity-info"><h4>Походы к водопадам</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_4.jpg" alt="Рыбалка"><div class="activity-info"><h4>Рыбалка</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_5.jpg" alt="Квадроциклы"><div class="activity-info"><h4>Квадроциклы с инструктором</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_6.jpg" alt="Велосипеды"><div class="activity-info"><h4>Велосипеды</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_7.jpg" alt="Лыжи"><div class="activity-info"><h4>Лыжи и снегоходы</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_8.jpg" alt="Фототуры"><div class="activity-info"><h4>Фототуры</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_9.jpg" alt="Дегустации"><div class="activity-info"><h4>Дегустации</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_10.jpg" alt="Костёр"><div class="activity-info"><h4>Романтика у костра</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_11.jpg" alt="Астронаблюдение"><div class="activity-info"><h4>Астронаблюдение</h4></div></div>
+                <div class="activity-card fade-in"><img src="images/act_12.jpg" alt="Гора"><div class="activity-info"><h4>Гора Тилан-Туу</h4></div></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Всё для отдыха</h2>
+            
+            <div class="infra-grid">
+                <div class="infra-card fade-in">
+                    <img src="images/infra_1.jpg" alt="Астрокупол и Набережная">
+                    <div class="info">
+                        <h3>Астрокупол и Набережная</h3>
+                        <p>Наблюдение за звёздами и прогулки у воды.</p>
+                    </div>
+                </div>
+
+                <div class="infra-card fade-in">
+                    <img src="images/infra_2.jpg" alt="Детская площадка">
+                    <div class="info">
+                        <h3>Детская площадка</h3>
+                        <p>Безопасные игры из натурального дерева.</p>
+                    </div>
+                </div>
+
+                <div class="infra-card fade-in" style="grid-column: span 2; height: 500px;">
+                    <img src="images/bonfire.jpg" alt="Костровая площадь">
+                    <div class="info">
+                        <h3>Костровая площадь</h3>
+                        <p>Уютные посиделки с гитарой, песнями и историями.</p>
+                    </div>
+                </div>
+
+                <div class="infra-card fade-in" style="height: 600px;">
+                    <div class="health-path-carousel" id="carousel-health">
+                        <div class="health-path-carousel-track">
+                            <div class="health-path-carousel-slide"><img src="images/infra_health_1.jpg" alt="Тропа здоровья 1"></div>
+                            <div class="health-path-carousel-slide"><img src="images/infra_health_2.jpg" alt="Тропа здоровья 2"></div>
+                        </div>
+                        <button class="health-path-carousel-btn prev" onclick="moveHealthCarousel(-1)">‹</button>
+                        <button class="health-path-carousel-btn next" onclick="moveHealthCarousel(1)">›</button>
+                    </div>
+                    <div class="info">
+                        <h3>Тропа здоровья</h3>
+                        <p>Маршрут для прогулок и восстановления сил.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section tight-bottom">
+        <div class="container">
+            <h2 class="section-title">Что говорят гости</h2>
+            <div class="features-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;">
+                <div class="review-card fade-in">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Невероятное место. Просыпаешься с видом на Телецкое — и всё остальное перестаёт иметь значение. Сервис на уровне европейских эко-резортов."</p>
+                    <h4>Анна К.</h4>
+                    <p style="color: #888; font-size: 14px;">Новосибирск · Июль 2025</p>
+                </div>
+                <div class="review-card fade-in">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Приезжали с семьёй в Семейный Дом. Дети не хотели уезжать. Баня, купель, лес — идеальное отключение от города. Вернёмся зимой."</p>
+                    <h4>Михаил Р.</h4>
+                    <p style="color: #888; font-size: 14px;">Москва · Август 2025</p>
+                </div>
+                <div class="review-card fade-in">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Панорамный Люкс — это отдельная вселенная. Собственная купель, три спальни, и огромные окна с озером. Ресторан тоже на высоте."</p>
+                    <h4>Ольга В.</h4>
+                    <p style="color: #888; font-size: 14px;">Томск · Сентябрь 2025</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section tight-top" id="booking">
+        <div class="container">
+            <div class="booking-section fade-in">
+                <h2 class="section-title" style="color: var(--white);">Забронируйте прямо сейчас</h2>
+                <div class="booking-tabs">
+                    <div class="tab active" data-target="house">Дом</div>
+                    <div class="tab" data-target="restaurant">Столик в ресторане</div>
+                    <div class="tab" data-target="masterclass">Мастер-класс</div>
+                    <div class="tab" data-target="spa">Зона отдыха</div>
+                </div>
+                <form class="booking-form" onsubmit="event.preventDefault(); alert('Заявка отправлена!');">
+                    <div class="input-group">
+                        <label>Что бронируем?</label>
+                        <select id="serviceSelect">
+                            <option>Лесная Студия</option>
+                            <option>Семейный Дом</option>
+                            <option>Панорамный Люкс</option>
+                            <option>Столик в ресторане</option>
+                            <option>Зона отдыха</option>
+                            <option>Гончарное искусство</option>
+                            <option>Резьба по дереву</option>
+                            <option>Чайная церемония</option>
+                        </select>
+                    </div>
+                    <div class="input-group"><label>Дата заезда</label><input type="date"></div>
+                    <div class="input-group"><label>Дата выезда</label><input type="date"></div>
+                    <div class="input-group"><label>Гости</label><select><option>1 гость</option><option>2 гостя</option><option>3 гостя</option><option>4 гостя</option><option>5+</option></select></div>
+                    <div class="input-group" style="grid-column: span 4;"><label>Комментарий</label><textarea rows="3" style="resize: none;" placeholder="Ваши пожелания..."></textarea></div>
+                    <div class="booking-btn"><button type="submit" class="btn btn-gold">Забронировать</button></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Часто задаваемые вопросы</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-q" onclick="this.parentElement.classList.toggle('active')">Как добраться до базы отдыха? <span>+</span></div>
+                    <div class="faq-a">Мы находимся в поселке Артыбаш. Удобнее всего доехать на автомобиле (есть бесплатная парковка) или заказать трансфер.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="this.parentElement.classList.toggle('active')">Работает ли база зимой? <span>+</span></div>
+                    <div class="faq-a">Да, мы работаем круглый год. Зимой доступны бани, купели, снегоходы и лыжи.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="this.parentElement.classList.toggle('active')">Можно ли приехать с домашними животными? <span>+</span></div>
+                    <div class="faq-a">Да, в некоторые категории домов можно заселяться с питомцами. Уточняйте при бронировании.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="this.parentElement.classList.toggle('active')">Что включено в стоимость? <span>+</span></div>
+                    <div class="faq-a">В стоимость включено проживание, Wi-Fi, парковка, пользование всей инфраструктурой базы.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="this.parentElement.classList.toggle('active')">Есть ли минимальный срок бронирования? <span>+</span></div>
+                    <div class="faq-a">В будние дни минимальный срок 1 ночь, в праздничные дни — от 2 ночей.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="this.parentElement.classList.toggle('active')">Как работает отмена? <span>+</span></div>
+                    <div class="faq-a">Бесплатная отмена за 7 дней до заезда. При более поздней отмене удерживается стоимость одной ночи.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="contacts">
+        <div class="container">
+            <h2 class="section-title">Приедьте к нам</h2>
+            <div class="contact-flex">
+                <div class="contact-info fade-in">
+                    <h3>Свяжитесь с нами</h3>
+                    <div class="contact-item"><span>Адрес</span><p>Республика Алтай, Турочакский район, пос. Артыбаш, район Третьей речки</p></div>
+                    <div class="contact-item"><span>Телефон</span><a href="tel:+73887012345">+7 (38870) 1-23-45</a></div>
+                    <div class="contact-item"><span>Email</span><a href="mailto:hello@lyrika-dushi.ru">hello@lyrika-dushi.ru</a></div>
+                    <div class="contact-item"><span>Мессенджеры</span><p>WhatsApp · Telegram · VK</p></div>
+                    <div class="contact-item"><span>Координаты</span><p>51.7878° N, 87.2704° E</p></div>
+                </div>
+                <form class="contact-form fade-in" onsubmit="event.preventDefault(); alert('Отправлено!');">
+                    <h3 style="margin-bottom: 30px;">Написать нам</h3>
+                    <input type="text" placeholder="Ваше имя" required>
+                    <input type="tel" placeholder="Ваш телефон" required>
+                    <textarea rows="5" placeholder="Ваше сообщение..."></textarea>
+                    <button type="submit" class="btn btn-dark" style="width: 100%;">Отправить</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-logo">✦ Лирика Души</div>
+            <div class="footer-nav">
+                <a href="#about">О комплексе</a>
+                <a href="#houses">Дома</a>
+                <a href="#banya">Баня</a>
+                <a href="#tea">Чайная</a>
+                <a href="#craft">Мастерская</a>
+                <a href="#spa">Зона отдыха</a>
+                <a href="#contacts">Контакты</a>
+            </div>
+            <p class="footer-copy">Эко-база © 2026 · Республика Алтай, пос. Артыбаш</p>
+        </div>
+    </footer>
+
+    <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">↑</button>
+
+    <div class="modal-overlay" id="banyaModal">
+        <div class="modal">
+            <button class="close-btn" onclick="closeModal('banyaModal')">×</button>
+            <h3>Заказать кедровую баню</h3>
+            <form onsubmit="event.preventDefault(); alert('Заявка отправлена!');">
+                <input type="date" placeholder="Дата" required>
+                <input type="time" placeholder="Время" required>
+                <select>
+                    <option>2 часа (от 2 000 ₽)</option>
+                    <option>3 часа (от 3 000 ₽)</option>
+                    <option>4 часа (от 4 000 ₽)</option>
+                </select>
+                <input type="text" placeholder="Ваше имя" required>
+                <input type="tel" placeholder="Ваш телефон" required>
+                <button type="submit" class="btn btn-gold">Отправить заявку</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="teaModal">
+        <div class="modal">
+            <button class="close-btn" onclick="closeModal('teaModal')">×</button>
+            <h3>Записаться на чаепитие</h3>
+            <form onsubmit="event.preventDefault(); alert('Заявка отправлена!');">
+                <input type="date" placeholder="Дата" required>
+                <input type="time" placeholder="Время" required>
+                <input type="text" placeholder="Ваше имя" required>
+                <input type="tel" placeholder="Ваш телефон" required>
+                <button type="submit" class="btn btn-gold">Отправить заявку</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="craftModal">
+        <div class="modal">
+            <button class="close-btn" onclick="closeModal('craftModal')">×</button>
+            <h3>Записаться на мастер-класс</h3>
+            <form onsubmit="event.preventDefault(); alert('Заявка отправлена!');">
+                <select>
+                    <option>Гончарное искусство (1 800 ₽)</option>
+                    <option>Резьба по дереву (2 200 ₽)</option>
+                    <option>Плетение из бересты (1 500 ₽)</option>
+                </select>
+                <input type="date" placeholder="Дата" required>
+                <input type="time" placeholder="Время" required>
+                <input type="text" placeholder="Ваше имя" required>
+                <input type="tel" placeholder="Ваш телефон" required>
+                <button type="submit" class="btn btn-gold">Отправить заявку</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- Функции для модальных окон ---
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal(this.id);
+                }
+            });
+        });
+
+        // --- Универсальная функция для каруселей с автопрокруткой ---
+        function createAutoCarousel(carouselId, moveFn, interval = 4000) {
+            let autoInterval = null;
+            
+            function startAuto() {
+                if (autoInterval) clearInterval(autoInterval);
+                autoInterval = setInterval(() => {
+                    moveFn(1);
+                }, interval);
+            }
+            
+            function stopAuto() {
+                if (autoInterval) {
+                    clearInterval(autoInterval);
+                    autoInterval = null;
+                }
+            }
+            
+            // Найти карусель и добавить обработчики для паузы при наведении
+            const carousel = document.getElementById(carouselId);
+            if (carousel) {
+                carousel.addEventListener('mouseenter', stopAuto);
+                carousel.addEventListener('mouseleave', startAuto);
+            }
+            
+            // Стартуем автопрокрутку
+            startAuto();
+            
+            // Возвращаем функции для ручного управления
+            return { startAuto, stopAuto };
+        }
+
+        // --- Карусель бани ---
+        let banyaIndex = 0;
+        function moveBanyaCarousel(direction) {
+            const track = document.querySelector('#carousel-banya .banya-carousel-track');
+            const slides = track.children;
+            const slideWidth = slides[0].getBoundingClientRect().width;
+            
+            banyaIndex = banyaIndex + direction;
+            if (banyaIndex < 0) banyaIndex = slides.length - 1;
+            if (banyaIndex >= slides.length) banyaIndex = 0;
+            
+            track.style.transform = `translateX(-${banyaIndex * slideWidth}px)`;
+        }
+        
+        // --- Карусель ресепшена ---
+        let receptionIndex = 0;
+        function moveReceptionCarousel(direction) {
+            const track = document.querySelector('#carousel-reception .reception-carousel-track');
+            const slides = track.children;
+            const slideWidth = slides[0].getBoundingClientRect().width;
+            
+            receptionIndex = receptionIndex + direction;
+            if (receptionIndex < 0) receptionIndex = slides.length - 1;
+            if (receptionIndex >= slides.length) receptionIndex = 0;
+            
+            track.style.transform = `translateX(-${receptionIndex * slideWidth}px)`;
+        }
+        
+        // --- Карусель тропы здоровья ---
+        let healthIndex = 0;
+        function moveHealthCarousel(direction) {
+            const track = document.querySelector('#carousel-health .health-path-carousel-track');
+            const slides = track.children;
+            const slideWidth = slides[0].getBoundingClientRect().width;
+            
+            healthIndex = healthIndex + direction;
+            if (healthIndex < 0) healthIndex = slides.length - 1;
+            if (healthIndex >= slides.length) healthIndex = 0;
+            
+            track.style.transform = `translateX(-${healthIndex * slideWidth}px)`;
+        }
+
+        // --- Запуск автопрокрутки для всех каруселей ---
+        // Баня (3 слайда, интервал 4 секунды)
+        createAutoCarousel('carousel-banya', moveBanyaCarousel, 4000);
+        
+        // Ресепшен (2 слайда, интервал 3.5 секунды)
+        createAutoCarousel('carousel-reception', moveReceptionCarousel, 3500);
+        
+        // Тропа здоровья (2 слайда, интервал 3.5 секунды)
+        createAutoCarousel('carousel-health', moveHealthCarousel, 3500);
+
+        // --- Табы бронирования ---
+        const bookingTabs = document.querySelectorAll('.tab');
+        bookingTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                bookingTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const target = tab.getAttribute('data-target');
+                const select = document.getElementById('serviceSelect');
+                if (target === 'house') select.value = 'Лесная Студия';
+                else if (target === 'restaurant') select.value = 'Столик в ресторане';
+                else if (target === 'masterclass') select.value = 'Гончарное искусство';
+                else if (target === 'spa') select.value = 'Зона отдыха';
+            });
+        });
+
+        // --- Анимация появления ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+    </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кедровая баня — Лирика Души</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #F7F3EB; color: #1C2622; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .btn { display: inline-block; padding: 15px 40px; border-radius: 100px; background: #C5A56A; color: #1C2622; font-weight: 700; text-decoration: none; margin-top: 20px; }
+        .btn:hover { background: #B0904F; }
+        a.back { color: #C5A56A; text-decoration: none; font-size: 14px; }
+        
+        /* ===== КАРУСЕЛЬ ===== */
+        .carousel {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            margin-top: 30px;
+            height: 450px;
+        }
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        .carousel-slide {
+            min-width: 100%;
+        }
+        .carousel-slide img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            z-index: 2;
+            font-size: 20px;
+        }
+        .carousel-btn.prev { left: 0; }
+        .carousel-btn.next { right: 0; }
+        .carousel-btn:hover {
+            background: var(--gold);
+            color: var(--dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back">← На главную</a>
+        <h1>Кедровая баня</h1>
+        
+        <!-- КАРУСЕЛЬ С ФОТО -->
+        <div class="carousel" id="carousel-banya">
+            <div class="carousel-track">
+                <div class="carousel-slide"><img src="images/banya_1.jpg" alt="Баня с купелью"></div>
+                <div class="carousel-slide"><img src="images/banya_2.jpg" alt="Парная"></div>
+                <div class="carousel-slide"><img src="images/banya_3.jpg" alt="Внутренний вид"></div>
+            </div>
+            <button class="carousel-btn prev" onclick="moveCarousel('carousel-banya', -1)">‹</button>
+            <button class="carousel-btn next" onclick="moveCarousel('carousel-banya', 1)">›</button>
+        </div>
+        
+        <p>Две кедровые бани с купелью и видом на лес. Бронь от 2 000 ₽/час. Мы подготовим дрова, ароматные травы и полотенца. Всё, что вам нужно — это расслабиться!</p>
+        <p style="color: #666;">Принимаем компании до 10 человек. Работаем круглый год.</p>
+        
+        <a href="index.html#booking" class="btn">Забронировать баню</a>
+    </div>
+
+    <script>
+        function moveCarousel(id, direction) {
+            const track = document.getElementById(id);
+            const slides = track.children;
+            const slideWidth = slides[0].getBoundingClientRect().width;
+            
+            let currentIndex = 0;
+            const matrix = getComputedStyle(track).transform;
+            if (matrix !== 'none') {
+                const values = matrix.split('(')[1].split(')')[0].split(',');
+                currentIndex = Math.abs(parseInt(values[4]) / slideWidth);
+            }
+
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0) newIndex = slides.length - 1;
+            if (newIndex >= slides.length) newIndex = 0;
+
+            track.style.transform = `translateX(-${newIndex * slideWidth}px)`;
+        }
+    </script>
+</body>
+</html>
